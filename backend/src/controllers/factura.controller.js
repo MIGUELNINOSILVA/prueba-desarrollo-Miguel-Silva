@@ -29,3 +29,11 @@ export const getClienteFactura = async (req, res) => {
     });
   }
 };
+
+export const getFacturaByIdCliente = async(req, res)=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
