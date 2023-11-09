@@ -1,14 +1,20 @@
 import { Schema, model } from "mongoose";
 
-const facturaSchema = new Schema({
-  id_cliente: {
-    ref: "Cliente",
-    type: Schema.Types.ObjectId
+const facturaSchema = new Schema(
+  {
+    id_cliente: {
+      ref: "Cliente",
+      type: Schema.Types.ObjectId,
+    },
+    fecha: {
+      type: Date,
+      required: [true, "La fecha de la factura es obligatoria"],
+    },
   },
-  fecha: {
-    type: Date,
-    required: [true, "La fecha de la factura es obligatoria"]
+  {
+    timestamps: true,
+    versionKey: false,
   }
-});
+);
 
 export default model("Factura", facturaSchema);
