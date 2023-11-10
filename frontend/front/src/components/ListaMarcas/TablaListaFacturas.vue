@@ -23,21 +23,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
+      <!-- ... (código del modal) ... -->
     </div>
   </div>
 </template>
@@ -68,7 +54,7 @@ const columns = [
   { title: 'Nombre Cliente', data: 'id_factura.id_cliente.nombre' },
   { title: 'Apellido Cliente', data: 'id_factura.id_cliente.apellido' },
   { title: 'Producto nombre', data: 'id_producto.nombre' },
-  { title: 'Producto', data: 'id_producto.stock' },
+  { title: 'Producto en Stock', data: 'id_producto.stock' },
   { title: 'Producto precio', data: 'id_producto.precio' },
   {
     title: 'Eventos',
@@ -116,7 +102,11 @@ const fecha = new Date().toLocaleString('es-ES', {
 
 const dataTableOptions = {
   responsive: true,
-  dom: 'Bfrtip',
+  dom: 
+    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+    "<'row'<'col-sm-12'B>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   autoWidth: true,
   language: {
     url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
