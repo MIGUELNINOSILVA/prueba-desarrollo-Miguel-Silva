@@ -21,40 +21,9 @@
           },
           buttons: botones
         }">
-          <thead>
-            <tr>
-              <th>ID Cliente</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Dirección</th>
-              <th>Fecha Nacimiento</th>
-              <th>Teléfono</th>
-              <th>Email</th>
-              <th>Categoría</th>
-              <th>Acciones</th>
-
-            </tr>
+          <thead> 
           </thead>
-          <tbody>
-            <tr v-for="product in products" :key="product._id">
-              <td>{{ product.id_cliente }}</td>
-              <td>{{ product.nombre }}</td>
-              <td>{{ product.apellido }}</td>
-              <td>{{ product.direccion }}</td>
-              <td>{{ product.fecha_nacimiento }}</td>
-              <td>{{ product.telefono }}</td>
-              <td>{{ product.email }}</td>
-              <td>{{ product.categoria }}</td>
-              <td class="d-flex">
-                <button class="btn btn-primary" @click="handleEditButton(row.id_cliente)"><i
-                    class="fas fa-edit"></i></button>
-                <button class="btn btn-danger" @click="handleDeleteButton(row.id_cliente)"><i class="fa fa-trash"
-                    aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                  Launch demo modal
-                </button>
-              </td>
-            </tr>
+          <tbody> 
           </tbody>
         </DataTable>
       </div>
@@ -78,27 +47,32 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const products = ref([]);
+
+// Define la función en el ámbito global
+window.handleDeleteButton = function(id) {
+  console.log("ss");
+};
+
 const columns = [
-  { title: 'ID Cliente', data: 'id_cliente' },
-  { title: 'Nombre', data: 'nombre' },
-  { title: 'Apellido', data: 'apellido' },
-  { title: 'Dirección', data: 'direccion' },
-  { title: 'Fecha Nacimiento', data: 'fecha_nacimiento' },
-  { title: 'Teléfono', data: 'telefono' },
-  { title: 'Email', data: 'email' },
-  { title: 'Categoría', data: 'categoria' },
+  { title: 'Numero de factura', data: 'id_factura.num_factura' },
+  { title: 'Fecha Factura', data: 'id_factura.fecha' },
+  { title: 'Id Cliente', data: 'id_factura.id_cliente.id_cliente' },
+  { title: 'Nombre Cliente', data:'id_factura.id_cliente.nombre' },
+  { title: 'Apellido Cliente', data: 'id_factura.id_cliente.apellido' },
+  { title: "Producto nombre", data: 'id_producto.nombre' },
+  { title: "Producto", data: 'id_producto.stock' },
+  { title: "Producto precio", data: 'id_producto.precio' },
   {
     title: 'Acciones',
     data: null,
     searchable: false,
     orderable: false,
     render: function (data, type, row) {
-      return `<button class="btn btn-primary" @click="handleEditButton(row.id_cliente)"><i class="fas fa-edit"></i></button>
-      <button class="btn btn-danger" @click="handleDeleteButton(row.id_cliente)"><i class="fa fa-trash" aria-hidden="true"></i></button>`;
-
-    }
+      return '<button class="btn btn-danger" onclick="handleDeleteButton(' + JSON.stringify(row._id) + ');"><i class="fa-solid fa-trash"></i></button>';
+    },
   },
 ];
+
 
 
 let fecha = new Date(
@@ -130,7 +104,7 @@ const botones = [
 
 const getProducts = async () => {
   try {
-    const url = 'http://localhost:3000/api/cliente';
+    const url = 'http://localhost:3000/api/facturaproducto';
     const response = await fetch(url);
     const result = await response.json();
     console.log(result.data);
@@ -139,11 +113,6 @@ const getProducts = async () => {
     console.error('Error fetching data:', error);
   }
 };
-
-const handleDeleteButton = (id) => {
-  console.log("Has dado click en el botón 2", id);
-}
-
 onMounted(getProducts);
 
 window.JSZip = jszip;
