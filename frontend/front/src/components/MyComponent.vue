@@ -65,7 +65,7 @@ const eliminarFavoritos = (position) => {
       <template v-for="(fruta, index) in arrayFrutas" :key="fruta.name">
         <li v-if="fruta.stock > 1">
           {{ fruta.name }}
-        </li>
+      </li>
 
       </template>
     </ul>

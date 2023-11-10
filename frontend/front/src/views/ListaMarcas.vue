@@ -15,6 +15,7 @@ import TablaListaMarcas from '../components/ListaMarcas/TablaListaMarcas.vue';
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #ecf0f5
 }
 
 
