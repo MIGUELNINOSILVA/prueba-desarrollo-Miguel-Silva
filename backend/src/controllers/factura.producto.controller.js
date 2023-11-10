@@ -26,11 +26,11 @@ export const getAllFacturaProductos = async (req, res) => {
 
 export const buyProducts = async (req, res) => {
   try {
-    const data = await FacturaProductos.find().populate(
-      "id_factura id_producto"
-    );
+    const { id_factura, id_producto } = req.body;
+    console.log(id_factura, id_producto);
+    const data = await FacturaProductos.create(req.body);
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
-    res.status(200).json({
+    res.status(201).json({
       data,
     });
   } catch (error) {

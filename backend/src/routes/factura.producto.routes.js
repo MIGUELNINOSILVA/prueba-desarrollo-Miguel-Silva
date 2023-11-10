@@ -4,6 +4,6 @@ import { buyProducts, getAllFacturaProductos } from "../controllers/factura.prod
 const router = Router();
 
 router.get("/",getAllFacturaProductos);
-router.post("/comprar", buyProducts);
+router.post("/", buyProducts);
 
 export default router;

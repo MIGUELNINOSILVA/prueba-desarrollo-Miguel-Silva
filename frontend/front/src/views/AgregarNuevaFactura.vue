@@ -108,9 +108,8 @@ const handleSubmit = (e) => {
   console.log(selectedCliente.value);
   console.log(selectedProducto.value);
 
-  // Wait for getFactura to complete before calculating num_factura
   getFactura().then(() => {
-    const cantidad = facturas.value.length + 1; // Use facturas.value.length instead of facturas.length
+    const cantidad = facturas.value.length + 1;
     const data = {
       id_cliente: selectedCliente.value,
       fecha: new Date(),
@@ -120,6 +119,16 @@ const handleSubmit = (e) => {
     postFactura(data);
     alert("Factura agregada correctamente");
   });
+
+  getFactura().then(()=> {
+    const idFactura = facturas.value[facturas.value.length - 1]._id;
+    const data = {
+      id_factura: idFactura,
+      id_producto: selectedProducto.value,
+    }
+    console.log(data); 
+  }) 
+
 }
 
 watchEffect(() => {
