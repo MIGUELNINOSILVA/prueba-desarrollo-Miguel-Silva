@@ -1,39 +1,18 @@
 <template>
   <div class="row h-75 bg-white p-5">
     <div class="col-lg-12 offset-lg-2 m-0" style="max-height: 75vh; overflow-y: auto;">
-      <div class="table-responsive ">
-        <DataTable :data="products" :columns="columns" class="table table-striped display nowrap" :options="{
-          responsive: true,
-          dom: 'Bfrtip',
-          autoWidth: true,
-          language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
-            zeroRecords: 'No hay registros para mostrar',
-            infoEmpty: 'No hay registros para mostrar',
-            infoFiltered: '(filtrado de _MAX_ registros totales)',
-            search: 'Buscar:',
-            paginate: {
-              first: 'Primero',
-              last: 'Último',
-              next: 'Siguiente',
-              previous: 'Anterior',
-            },
-          },
-          buttons: botones
-        }">
-          <thead> 
-          </thead>
-          <tbody> 
-          </tbody>
+      <div class="table-responsive">
+        <DataTable :data="products" :columns="columns" class="table table-striped display nowrap"
+          :options="dataTableOptions">
+          <thead></thead>
+          <tbody></tbody>
         </DataTable>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-
 import { ref, onMounted } from 'vue';
 import DataTable from 'datatables.net-vue3';
 import Buttons from 'datatables.net-buttons-bs5';
@@ -48,59 +27,30 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const products = ref([]);
 
-// Define la función en el ámbito global
-window.handleDeleteButton = function(id) {
-  console.log("ss");
+const handleDeleteButton = function (id) {
+  console.log(id);
 };
 
 const columns = [
   { title: 'Numero de factura', data: 'id_factura.num_factura' },
   { title: 'Fecha Factura', data: 'id_factura.fecha' },
   { title: 'Id Cliente', data: 'id_factura.id_cliente.id_cliente' },
-  { title: 'Nombre Cliente', data:'id_factura.id_cliente.nombre' },
+  { title: 'Nombre Cliente', data: 'id_factura.id_cliente.nombre' },
   { title: 'Apellido Cliente', data: 'id_factura.id_cliente.apellido' },
-  { title: "Producto nombre", data: 'id_producto.nombre' },
-  { title: "Producto", data: 'id_producto.stock' },
-  { title: "Producto precio", data: 'id_producto.precio' },
+  { title: 'Producto nombre', data: 'id_producto.nombre' },
+  { title: 'Producto', data: 'id_producto.stock' },
+  { title: 'Producto precio', data: 'id_producto.precio' },
   {
-    title: 'Acciones',
-    data: null,
-    searchable: false,
-    orderable: false,
-    render: function (data, type, row) {
-      return '<button class="btn btn-danger" onclick="handleDeleteButton(' + JSON.stringify(row._id) + ');"><i class="fa-solid fa-trash"></i></button>';
+    title: 'Eventos',
+    data: function (row, type, val, meta) {
+      return `
+        <button class="btn btn-danger eliminar" data-eliminar="${row.id_factura._id}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      `;
     },
   },
 ];
-
-
-
-let fecha = new Date(
-  Date.now()
-).toLocaleString('es-ES', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-});
-
-// Formatenado fecha;
-
-const botones = [
-  {
-    title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
-    extend: "excelHtml5",
-    text: '<i class="fa-solid fa-file-excel"></i> Excel',
-    className: 'btn btn-success'
-  },
-  {
-    title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
-    extend: "pdfHtml5",
-    text: '<i class="fa-solid fa-file-pdf"></i> PDF',
-    className: 'btn btn-danger'
-  }
-];
-
-
 
 const getProducts = async () => {
   try {
@@ -117,6 +67,54 @@ onMounted(getProducts);
 
 window.JSZip = jszip;
 DataTable.use(Buttons, ButtonsCol, ButtonHtml5, ButtonPrint, pdfMake, jszip);
+
+const fecha = new Date().toLocaleString('es-ES', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+const dataTableOptions = {
+  responsive: true,
+  dom: 'Bfrtip',
+  autoWidth: true,
+  language: {
+    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
+    zeroRecords: 'No hay registros para mostrar',
+    infoEmpty: 'No hay registros para mostrar',
+    infoFiltered: '(filtrado de _MAX_ registros totales)',
+    search: 'Buscar:',
+    paginate: {
+      first: 'Primero',
+      last: 'Último',
+      next: 'Siguiente',
+      previous: 'Anterior',
+    },
+  },
+  drawCallback: function () {
+    const buttons = document.querySelectorAll('.eliminar');
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const id = button.getAttribute('data-eliminar');
+        handleDeleteButton(id);
+      });
+    });
+  },
+  buttons: [
+    {
+      title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
+      extend: 'excelHtml5',
+      text: '<i class="fa-solid fa-file-excel"></i> Excel',
+      className: 'btn btn-success',
+    },
+    {
+      title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
+      extend: 'pdfHtml5',
+      text: '<i class="fa-solid fa-file-pdf"></i> PDF',
+      className: 'btn btn-danger',
+    },
+  ],
+};
 </script>
 
 <style scoped>
