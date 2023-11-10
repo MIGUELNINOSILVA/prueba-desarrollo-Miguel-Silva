@@ -67,6 +67,9 @@ const products = ref([]);
 
 const handleDeleteButton = function (id) {
   console.log({id});
+  
+  const confirmar = confirm('¿Estas seguro de eliminar esta factura?');
+  if (!confirmar) return;
   deleteFactura({ id }).then(() => {
     getProducts();
   }).catch((error) => {

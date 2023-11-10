@@ -135,6 +135,7 @@ const handleSubmit = (e) => {
     console.log(data);
     postFactura(data);
     alert("Factura agregada correctamente");
+
   });
 
   getFactura().then(()=> {
