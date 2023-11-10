@@ -1,11 +1,11 @@
 <script setup>
-import TablaListaMarcas from '../components/ListaMarcas/TablaListaMarcas.vue';
+import TablaListaFacturas from '../components/ListaMarcas/TablaListaFacturas.vue';
 
 </script>
 
 <template>
   <div class="table-component">
-    <TablaListaMarcas />
+    <TablaListaFacturas />
   </div>
 </template>
 
