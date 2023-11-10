@@ -6,17 +6,7 @@
         <DataTable :data="products" :columns="columns" class="table table-striped display nowrap"
           :options="dataTableOptions">
           <thead></thead>
-          <tbody>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="d-flex"></td>
-          </tbody>
+          <tbody></tbody>
         </DataTable>
       </div>
     </div>
@@ -57,6 +47,7 @@
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue';
 import DataTable from 'datatables.net-vue3';
 import Buttons from 'datatables.net-buttons-bs5';
@@ -66,6 +57,9 @@ import ButtonPrint from 'datatables.net-buttons/js/buttons.print.mjs';
 import jszip from 'jszip';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -130,7 +124,7 @@ const fecha = new Date().toLocaleString('es-ES', {
 
 const dataTableOptions = {
   responsive: true,
-  dom: 
+  dom:
     "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
     "<'row'<'col-sm-12'B>>" +
     "<'row'<'col-sm-12'tr>>" +
@@ -163,13 +157,22 @@ const dataTableOptions = {
       title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
       extend: 'excelHtml5',
       text: '<i class="fa-solid fa-file-excel"></i> Excel',
-      className: 'btn btn-success',
+      className: 'btn btn-success mr-5',
     },
     {
       title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
       extend: 'pdfHtml5',
       text: '<i class="fa-solid fa-file-pdf"></i> PDF',
-      className: 'btn btn-danger',
+      className: 'btn btn-danger mx-2',
+    },
+    {
+      title: `Agregar Nueva factura`,
+      text: '<i class="fa-solid fa-file-circle-plus"></i> Agregar nueva Factura',
+      className: 'btn btn-danger mx-2',
+      action: () => {
+        // Add the logic to redirect to the desired route
+        router.push('/agregarfactura');
+      },
     },
   ],
 };

@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 // import MyComponent from "../components/MyComponent.vue";
 import NavBar from "../components/NavBarComponent.vue";
 import ListaMarcas from "../views/ListaMarcas.vue";
+import AgregarNuevaFactura from "../views/AgregarNuevaFactura.vue";
 
 const routes = [
   {
@@ -15,6 +16,11 @@ const routes = [
     path: "/nav",
     name: "Pagina NavBar",
     component: NavBar,
+  },
+  {
+    path: "/agregarFactura",
+    name: "Agregar nueva factura",
+    component: AgregarNuevaFactura,
   },
 ];
 
