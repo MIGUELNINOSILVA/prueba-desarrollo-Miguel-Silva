@@ -96,6 +96,23 @@ const postFactura = async (dataFactura) => {
   }
 }
 
+const postFacturaProducto = async (dataFacturaProducto) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/facturaproducto', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataFacturaProducto),
+    });
+    const data = await response.json();
+    console.log(data.data);
+
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
 const filterClientes = () => {
   const query = searchQuery.value.toLowerCase();
   filteredClientes.value = clientes.value.filter(cliente =>
@@ -127,6 +144,7 @@ const handleSubmit = (e) => {
       id_producto: selectedProducto.value,
     }
     console.log(data); 
+    postFacturaProducto(data);
   }) 
 
 }
