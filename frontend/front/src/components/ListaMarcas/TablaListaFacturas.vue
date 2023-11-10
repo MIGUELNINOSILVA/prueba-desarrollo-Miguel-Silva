@@ -66,7 +66,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const products = ref([]);
 
 const handleDeleteButton = function (id) {
-  console.log(id);
+  console.log({id});
+  deleteFactura({ id }).then(() => {
+    getProducts();
+  }).catch((error) => {
+    console.log(error);
+  })
 };
 
 const columns = [
@@ -89,7 +94,7 @@ const columns = [
             </button>
         </li>
         <li>
-          <button class="btn btn-danger eliminar" data-eliminar="${row.id_factura._id}">
+          <button class="btn btn-danger eliminar" data-eliminar="${row._id}">
             <i class="fa-solid fa-trash"></i>
           </button>
           </li>
@@ -99,6 +104,23 @@ const columns = [
     },
   },
 ];
+
+const deleteFactura = async (dataFactura) => {
+  try {
+    const url = 'http://localhost:3000/api/facturaproducto';
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataFactura),
+    });
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
 
 const getProducts = async () => {
   try {
@@ -149,6 +171,7 @@ const dataTableOptions = {
       button.addEventListener('click', function () {
         const id = button.getAttribute('data-eliminar');
         handleDeleteButton(id);
+
       });
     });
   },
