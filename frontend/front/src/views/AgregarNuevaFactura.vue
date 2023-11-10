@@ -1,6 +1,6 @@
 <template>
   <div class="container-formulario">
-    <form>
+    <form @submit.prevent="handleSubmit">
       <h2>Agregar nueva factura</h2>
       <div class="form-group mt-3">
         <label for="searchInput">Buscar cliente:</label>
@@ -24,7 +24,14 @@
           </option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+      <div class="facturas-container d-flex gap-2">
+
+        <button type="submit" class="btn btn-primary mt-3">Agregar factura</button> 
+        <router-link to="/" class="btn btn-danger mt-3">
+          Volver
+        </router-link>
+
+      </div>
     </form>
   </div>
 </template>
@@ -36,6 +43,7 @@ const clientes = ref([]);
 const productos = ref([]);
 const searchQuery = ref('');
 const selectedCliente = ref('');
+const selectedProducto = ref('');
 const filteredClientes = ref([]);
 
 const getClientes = async () => {
@@ -65,6 +73,13 @@ const filterClientes = () => {
     cliente.nombre.toLowerCase().includes(query) || cliente.id_cliente.toString().includes(query)
   );
 };
+
+// Event submit
+const handleSubmit = (e)=> {
+  console.log(selectedCliente.value);
+  console.log(selectedProducto.value);
+
+}
 
 watchEffect(() => {
   filterClientes();
