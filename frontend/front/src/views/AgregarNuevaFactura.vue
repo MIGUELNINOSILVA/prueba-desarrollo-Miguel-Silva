@@ -26,7 +26,7 @@
       </div>
       <div class="facturas-container d-flex gap-2">
 
-        <button type="submit" class="btn btn-primary mt-3">Agregar factura</button> 
+        <button type="submit" class="btn btn-primary mt-3">Agregar factura</button>
         <router-link to="/" class="btn btn-danger mt-3">
           Volver
         </router-link>
@@ -45,6 +45,7 @@ const searchQuery = ref('');
 const selectedCliente = ref('');
 const selectedProducto = ref('');
 const filteredClientes = ref([]);
+const facturas = ref([]);
 
 const getClientes = async () => {
   try {
@@ -67,6 +68,34 @@ const getProductos = async () => {
   }
 };
 
+const getFactura = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/factura/clientes');
+    const data = await response.json();
+    console.log(data.data);
+    facturas.value = data.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+const postFactura = async (dataFactura) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/factura/clientes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataFactura),
+    });
+    const data = await response.json();
+    console.log(data.data);
+
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
 const filterClientes = () => {
   const query = searchQuery.value.toLowerCase();
   filteredClientes.value = clientes.value.filter(cliente =>
@@ -75,10 +104,22 @@ const filterClientes = () => {
 };
 
 // Event submit
-const handleSubmit = (e)=> {
+const handleSubmit = (e) => {
   console.log(selectedCliente.value);
   console.log(selectedProducto.value);
 
+  // Wait for getFactura to complete before calculating num_factura
+  getFactura().then(() => {
+    const cantidad = facturas.value.length + 1; // Use facturas.value.length instead of facturas.length
+    const data = {
+      id_cliente: selectedCliente.value,
+      fecha: new Date(),
+      num_factura: cantidad,
+    }
+    console.log(data);
+    postFactura(data);
+    alert("Factura agregada correctamente");
+  });
 }
 
 watchEffect(() => {
@@ -88,6 +129,7 @@ watchEffect(() => {
 onMounted(() => {
   getClientes();
   getProductos();
+  getFactura();
 });
 </script>
 
