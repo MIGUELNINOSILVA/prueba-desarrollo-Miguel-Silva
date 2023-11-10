@@ -50,3 +50,27 @@ export const getFacturaByIdCliente = async (req, res) => {
     });
   }
 };
+
+export const createFactura = async (req, res) => {
+  try {
+    const { id_cliente, num_factura, fecha } = req.body;
+    const cliente = await Cliente.findById(id_cliente);
+    if (!cliente) return res.status(404).json({ msg: "Cliente no encontrado" });
+    console.log(num_factura);
+    const newFactura = new Factura({
+      id_cliente,
+      num_factura,
+      fecha,
+    });
+
+    const facturaSaved = await newFactura.save();
+    res.status(201).json({
+      facturaSaved,
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: error,
+      msg: "Error on Server",
+    });
+  }
+}
