@@ -1,11 +1,18 @@
 import FacturaProductos from "../models/FacturaProductos.js";
+import Factura from "../models/Factura.js";
 
 export const getAllFacturaProductos = async (req, res) => {
   try {
     const data = await FacturaProductos.find().populate(
-      "id_factura id_producto"
-    );
+      {
+        path: "id_factura",
+        populate: {
+          path: "id_cliente",
+        }
+      }
+    ).populate("id_producto");
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
+    
     res.status(200).json({
       data,
     });

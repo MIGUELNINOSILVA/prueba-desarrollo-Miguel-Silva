@@ -1,10 +1,11 @@
 <template>
-  <div class="row h-75">
+  <div class="row h-75 bg-white p-5">
     <div class="col-lg-12 offset-lg-2 m-0" style="max-height: 75vh; overflow-y: auto;">
-      <div class="table-responsive">
-        <DataTable :data="products" :columns="columns" class="table table-striped table-bordered display" :options="{
+      <div class="table-responsive ">
+        <DataTable :data="products" :columns="columns" class="table table-striped display nowrap" :options="{
           responsive: true,
           dom: 'Bfrtip',
+          autoWidth: true,
           language: {
             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json',
             zeroRecords: 'No hay registros para mostrar',
@@ -18,7 +19,7 @@
               previous: 'Anterior',
             },
           },
-          buttons: botontes
+          buttons: botones
         }">
           <thead>
             <tr>
@@ -30,6 +31,8 @@
               <th>Teléfono</th>
               <th>Email</th>
               <th>Categoría</th>
+              <th>Acciones</th>
+
             </tr>
           </thead>
           <tbody>
@@ -42,15 +45,26 @@
               <td>{{ product.telefono }}</td>
               <td>{{ product.email }}</td>
               <td>{{ product.categoria }}</td>
+              <td class="d-flex">
+                <button class="btn btn-primary" @click="handleEditButton(row.id_cliente)"><i
+                    class="fas fa-edit"></i></button>
+                <button class="btn btn-danger" @click="handleDeleteButton(row.id_cliente)"><i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                  Launch demo modal
+                </button>
+              </td>
             </tr>
           </tbody>
         </DataTable>
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue';
 import DataTable from 'datatables.net-vue3';
 import Buttons from 'datatables.net-buttons-bs5';
@@ -73,6 +87,17 @@ const columns = [
   { title: 'Teléfono', data: 'telefono' },
   { title: 'Email', data: 'email' },
   { title: 'Categoría', data: 'categoria' },
+  {
+    title: 'Acciones',
+    data: null,
+    searchable: false,
+    orderable: false,
+    render: function (data, type, row) {
+      return `<button class="btn btn-primary" @click="handleEditButton(row.id_cliente)"><i class="fas fa-edit"></i></button>
+      <button class="btn btn-danger" @click="handleDeleteButton(row.id_cliente)"><i class="fa fa-trash" aria-hidden="true"></i></button>`;
+
+    }
+  },
 ];
 
 
@@ -86,7 +111,7 @@ let fecha = new Date(
 
 // Formatenado fecha;
 
-const botontes = [
+const botones = [
   {
     title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
     extend: "excelHtml5",
@@ -94,7 +119,7 @@ const botontes = [
     className: 'btn btn-success'
   },
   {
-    title: "Reporte de Clientes",
+    title: `Reporte de Clientes ${fecha.replace(/\//g, '-').replace(',', '').replace(/:/g, '-').replace(/ /g, '_')}`,
     extend: "pdfHtml5",
     text: '<i class="fa-solid fa-file-pdf"></i> PDF',
     className: 'btn btn-danger'
@@ -115,6 +140,10 @@ const getProducts = async () => {
   }
 };
 
+const handleDeleteButton = (id) => {
+  console.log("Has dado click en el botón 2", id);
+}
+
 onMounted(getProducts);
 
 window.JSZip = jszip;
@@ -125,4 +154,22 @@ DataTable.use(Buttons, ButtonsCol, ButtonHtml5, ButtonPrint, pdfMake, jszip);
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 @import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
 @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css';
+
+@media print {
+  body {
+    margin: 0;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+
+  .table,
+  .table th,
+  .table td {
+    border: 1px solid #dee2e6;
+  }
+}
 </style>
