@@ -100,14 +100,14 @@ const handleDeleteButton = async (id) => {
 };
 
 const columns = [
-  { title: 'Numero de factura', data: 'id_factura.num_factura' },
-  { title: 'Fecha Factura', data: 'id_factura.fecha' },
-  { title: 'Id Cliente', data: 'id_factura.id_cliente.id_cliente' },
-  { title: 'Nombre Cliente', data: 'id_factura.id_cliente.nombre' },
-  { title: 'Apellido Cliente', data: 'id_factura.id_cliente.apellido' },
-  { title: 'Producto nombre', data: 'id_producto.nombre' },
-  { title: 'Producto en Stock', data: 'id_producto.stock' },
-  { title: 'Producto precio', data: 'id_producto.precio' },
+  { title: 'Numero de factura', data: 'id_factura.num_factura', searchable: true },
+  { title: 'Fecha Factura', data: 'id_factura.fecha', searchable: true },
+  { title: 'Id Cliente', data: 'id_factura.id_cliente.id_cliente', searchable: true },
+  { title: 'Nombre Cliente', data: 'id_factura.id_cliente.nombre', searchable: true },
+  { title: 'Apellido Cliente', data: 'id_factura.id_cliente.apellido', searchable: true },
+  { title: 'Producto nombre', data: 'id_producto.nombre', searchable: true },
+  { title: 'Producto en Stock', data: 'id_producto.stock', searchable: true },
+  { title: 'Producto precio', data: 'id_producto.precio', searchable: true },
   {
     title: 'Eventos',
     data: function (row, type, val, meta) {
@@ -299,6 +299,10 @@ const dataTableOptions = {
       next: 'Siguiente',
       previous: 'Anterior',
     },
+    searching: true,
+    searchPanes: {
+      orderable: true 
+    },
   },
   drawCallback: function () {
     const buttons = document.querySelectorAll('.eliminar');
@@ -355,6 +359,7 @@ const dataTableOptions = {
 
 <style scoped>
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
 @import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
 @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css';
 
