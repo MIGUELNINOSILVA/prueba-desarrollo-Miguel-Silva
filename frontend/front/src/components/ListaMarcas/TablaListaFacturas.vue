@@ -12,27 +12,39 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+    <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modalMostrar">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content modal-dialog-centered">
+          <div class="modal-header col-10">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Factura</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close col-md-4 .ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body col-10">
             <form>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              <h2>Editar factura</h2>
+              <div class="form-group mt-3">
+                <label for="searchInput">Buscar cliente:</label>
+                <input type="text" value="">
+                <!-- <input type="text" class="form-control" id="searchInput" v-model="searchQuery" @input="filterClientes"> -->
               </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+              <div class="form-group mt-3">
+                <label for="exampleSelect mt-2">Selecciona el cliente:</label>
+                <select class="form-select mt-2" id="exampleSelect" v-model="selectedCliente" required>
+                  <!-- <option v-for="cliente in filteredClientes" :key="cliente._id" :value="cliente._id"> -->
+                    <!-- {{ cliente.nombre }} - {{ cliente.id_cliente }} -->
+                  <!-- </option> -->
+                </select>
               </div>
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+              <div class="form-group mt-3">
+                <label for="productSelect">Selecciona el producto:</label>
+                <select class="form-select mt-2" id="productSelect" v-model="selectedProducto" required>
+                  <!-- <option value="seleccionar" selected>Seleccionar</option>
+                  <option v-for="producto in productos" :key="producto._id" :value="producto._id">
+                    {{ producto.nombre }} - ${{ producto.precio }} Stock: {{ producto.stock }}
+                  </option> -->
+                </select>
+              </div>
+              <div class="facturas-container d-flex gap-2">
               </div>
             </form>
           </div>
@@ -64,6 +76,12 @@ const router = useRouter();
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const products = ref([]);
+const informacion = ref(null);
+const modalMostrar = ref(null);
+
+console.log("elemento modal");
+console.log(modalMostrar.value);
+
 
 const handleDeleteButton = async (id) => {
   console.log(id);
@@ -92,7 +110,7 @@ const columns = [
       return `
       <ul class="d-flex gap-2 list-unstyled">
         <li> 
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button type="button" class="btn btn-primary editar" data-bs-toggle="modal" data-bs-target="#editar" data-id="${row._id}" >
             <i class="fas fa-edit"></i>
             </button>
         </li>
@@ -119,7 +137,6 @@ const deleteFactura = async (dataFactura) => {
     });
     const result = await response.json();
     console.log(result);
-    alert("Se eliminó la factura exitosamente facturiiis")
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -198,11 +215,18 @@ const dataTableOptions = {
   },
   drawCallback: function () {
     const buttons = document.querySelectorAll('.eliminar');
+    const buttonModal = document.querySelectorAll('.editar');
     buttons.forEach(button => {
       button.addEventListener('click', function () {
         const id = button.getAttribute('data-eliminar');
         handleDeleteButton(id);
-
+      });
+    });
+    buttonModal.forEach(button => {
+      button.addEventListener('click', function () {
+        const id = button.getAttribute('data-id');
+        console.log(id);
+        // handleDeleteButton(id);
       });
     });
   },
