@@ -271,7 +271,8 @@ const updateFacturaProducto = async (idFacturaProducto, dataFacturaProducto) => 
 
 const updateFacturaCliente = async(idFactura,  idCliente)=>{
   try {
-    const  url = `http://localhost:3000/api/factura/clientes/${idFactura}`;
+    const  url = `http:
+    //localhost:3000/api/factura/clientes/${idFactura}`;
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
