@@ -43,7 +43,7 @@ export const buyProducts = async (req, res) => {
 
 export const deleteProducts = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const data = await FacturaProductos.findByIdAndDelete({_id: id});
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
@@ -61,7 +61,7 @@ export const deleteProducts = async (req, res) => {
 
 export const getFacturaByIdFactura = async(req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const data = await FacturaProductos.find({_id: id})
     .populate({
       path: "id_factura",

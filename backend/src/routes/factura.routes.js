@@ -7,6 +7,6 @@ router.get("/", getAllFacturas);
 router.get("/clientes", getClienteFactura);
 router.get("/clientes/:id", getFacturaByIdCliente);
 router.post("/clientes", createFactura);
-router.delete("/clientes", deleteFactura);
+router.delete("/clientes/:id", deleteFactura);
 
 export default router;

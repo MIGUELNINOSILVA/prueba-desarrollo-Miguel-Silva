@@ -4,8 +4,8 @@ import { buyProducts, deleteProducts, getAllFacturaProductos, getFacturaByIdFact
 const router = Router();
 
 router.get("/",getAllFacturaProductos);
-router.get("/detalle",getFacturaByIdFactura);
+router.get("/detalle/:id",getFacturaByIdFactura);
 router.post("/", buyProducts);
-router.delete("/", deleteProducts);
+router.delete("/:id", deleteProducts);
 
 export default router;

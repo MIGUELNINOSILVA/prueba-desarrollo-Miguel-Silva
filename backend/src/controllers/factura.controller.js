@@ -77,7 +77,7 @@ export const createFactura = async (req, res) => {
 
 export const deleteFactura = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const data = await Factura.findByIdAndDelete({_id: id});
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });

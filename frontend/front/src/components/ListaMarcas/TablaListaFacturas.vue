@@ -65,27 +65,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const products = ref([]);
 
-const handleDeleteButton = function (id) {
-  console.log({id});
-  
-  const confirmar = confirm('¿Estas seguro de eliminar esta factura?');
-  if (!confirmar) return;
-  deleteFactura({ id }).then(() => {
-    getProducts();
-  }).catch((error) => {
-    console.log(error);
-  })
-  getFacturaDetalle({id}).then((data) => {
-    console.log("Id de la factura");
-    console.log(data[0].id_factura._id);
-    // deleteFacturaCliente(dataFacturaCliente).then(() => {
-    //   console.log("Factura cliente eliminada");
-    // }).catch((error) => {
-    //   console.log(error);
-    // })
-  }).catch((error) => {
-    console.log(error);
-  })
+const handleDeleteButton = async (id) => {
+  console.log(id);
+  const facturasDetalles = await getFacturaDetalle(id);
+  console.log(facturasDetalles[0]);
+  await deleteFacturaDetalle(facturasDetalles[0]._id);
+  await deleteFactura(facturasDetalles[0].id_factura._id)
 };
 
 const columns = [
@@ -121,24 +106,24 @@ const columns = [
 
 const deleteFactura = async (dataFactura) => {
   try {
-    const url = 'http://localhost:3000/api/facturaproducto';
+    const url = `http://localhost:3000/api/factura/clientes/${dataFactura}`;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataFactura),
+      }
     });
     const result = await response.json();
     console.log(result);
+    alert("Se eliminó la factura exitosamente facturiiis")
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 };
 
-const getFacturaDetalle = async(datoIdFactura) => {
+const getFacturaDetalle = async (datoIdFactura) => {
   try {
-    const url = 'http://localhost:3000/api/facturaproducto';
+    const url = `http://localhost:3000/api/facturaproducto/detalle/${datoIdFactura}`;
     const response = await fetch(url);
     const result = await response.json();
     console.log(result.data);
@@ -148,18 +133,18 @@ const getFacturaDetalle = async(datoIdFactura) => {
   }
 }
 
-const deleteFacturaCliente = async(dataFacturaCliente)=>{
+const deleteFacturaDetalle = async(datoIdFacturaDetalle)=>{
   try {
-    const url = "http://localhost:3000/api/factura/clientes/";
+    const url = `http://localhost:3000/api/facturaproducto/${datoIdFacturaDetalle}`;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(dataFacturaCliente),
     });
     const result = await response.json();
-    console.log(result);  
+    console.log(result);
+    alert("Se eliminó la factura exitosamente")
   } catch (error) {
     console.error('Error fetching data:', error);
   }
