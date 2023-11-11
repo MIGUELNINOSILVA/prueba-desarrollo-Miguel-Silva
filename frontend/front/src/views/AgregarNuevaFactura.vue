@@ -90,7 +90,8 @@ const postFactura = async (dataFactura) => {
     });
     const data = await response.json();
     console.log("Se creó la factura");
-    console.log(data);
+    console.log(data.facturaSaved);
+    facturas.value.push(data.facturaSaved);
 
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -107,7 +108,8 @@ const postFacturaProducto = async (dataFacturaProducto) => {
       body: JSON.stringify(dataFacturaProducto),
     });
     const data = await response.json();
-    console.log(data.data);
+    console.log(data);
+    alert("Se creó la factura exitosamente");
 
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -133,6 +135,14 @@ const handleSubmit = async (e) => {
     };
     console.log(dataFactura);
     await postFactura(dataFactura);
+
+    const idFactura = facturas.value[facturas.value.length - 1]._id;
+    const dataFacturaProducto = {
+      id_factura: idFactura,
+      id_producto: selectedProducto.value,
+    };
+    console.log(dataFacturaProducto);
+    await postFacturaProducto(dataFacturaProducto);
   } catch (error) {
     console.error("Error:", error);
   }
