@@ -69,8 +69,12 @@ const handleDeleteButton = async (id) => {
   console.log(id);
   const facturasDetalles = await getFacturaDetalle(id);
   console.log(facturasDetalles[0]);
-  await deleteFacturaDetalle(facturasDetalles[0]._id);
-  await deleteFactura(facturasDetalles[0].id_factura._id)
+  if (confirm("¿Estás seguro de eliminar la factura?")) {
+    await deleteFacturaDetalle(facturasDetalles[0]._id);
+    await deleteFactura(facturasDetalles[0].id_factura._id);
+    await getProducts();
+  }
+
 };
 
 const columns = [
@@ -133,7 +137,7 @@ const getFacturaDetalle = async (datoIdFactura) => {
   }
 }
 
-const deleteFacturaDetalle = async(datoIdFacturaDetalle)=>{
+const deleteFacturaDetalle = async (datoIdFacturaDetalle) => {
   try {
     const url = `http://localhost:3000/api/facturaproducto/${datoIdFacturaDetalle}`;
     const response = await fetch(url, {
@@ -144,7 +148,6 @@ const deleteFacturaDetalle = async(datoIdFacturaDetalle)=>{
     });
     const result = await response.json();
     console.log(result);
-    alert("Se eliminó la factura exitosamente")
   } catch (error) {
     console.error('Error fetching data:', error);
   }
