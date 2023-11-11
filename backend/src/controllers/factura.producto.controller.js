@@ -45,11 +45,11 @@ export const deleteProducts = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const data = await FacturaProductos.findByIdAndDelete({_id: id});
+    const data = await FacturaProductos.findByIdAndDelete({ _id: id });
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
     res.status(200).json({
       data,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       type: error,
@@ -58,26 +58,52 @@ export const deleteProducts = async (req, res) => {
   }
 };
 
-
-export const getFacturaByIdFactura = async(req, res) => {
+export const getFacturaByIdFactura = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await FacturaProductos.find({_id: id})
-    .populate({
-      path: "id_factura",
-      populate: {
-        path: "id_cliente",
-      },
-    })
-    .populate("id_producto");
+    const data = await FacturaProductos.find({ _id: id })
+      .populate({
+        path: "id_factura",
+        populate: {
+          path: "id_cliente",
+        },
+      })
+      .populate("id_producto");
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
     res.status(200).json({
       data,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       type: error,
       msg: "Error on Server",
     });
   }
-}
+};
+
+export const updateFacturaProductos = async (req, res) => {
+  try {
+    const { id_factura, id_producto } = req.body;
+    if (!id_factura || !id_producto)
+      return res.status(404).json({ msg: "Datos incompletos" });
+    const data = await FacturaProductos.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        id_factura,
+        id_producto,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: error,
+      msg: "Error on Server",
+    });
+  }
+};

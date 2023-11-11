@@ -12,7 +12,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modalMostrar">
+    <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+      ref="modalMostrar">
       <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content modal-dialog-centered">
           <div class="modal-header col-10">
@@ -20,38 +21,41 @@
             <button type="button" class="btn-close col-md-4 .ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body col-10">
-            <form>
+            <form @submit.prevent="actualizarFactura()">
               <h2>Editar factura</h2>
               <div class="form-group mt-3">
-                <label for="searchInput">Buscar cliente:</label>
-                <input type="text" value="">
+                <label for="searchInput">Cliente:</label>
+                <input type="text" v-model="clienteFormulario" disabled>
                 <!-- <input type="text" class="form-control" id="searchInput" v-model="searchQuery" @input="filterClientes"> -->
               </div>
               <div class="form-group mt-3">
                 <label for="exampleSelect mt-2">Selecciona el cliente:</label>
-                <select class="form-select mt-2" id="exampleSelect" v-model="selectedCliente" required>
-                  <!-- <option v-for="cliente in filteredClientes" :key="cliente._id" :value="cliente._id"> -->
-                    <!-- {{ cliente.nombre }} - {{ cliente.id_cliente }} -->
-                  <!-- </option> -->
+                <select class="form-select mt-2" id="exampleSelect" v-model="selectedCliente">
+                  <option value="seleccionar">Seleccionar</option>
+                  <option v-for="cliente in clientes" :key="cliente._id" :value="cliente._id">
+                    {{ cliente.nombre }} - {{ cliente.id_cliente }}
+                  </option>
                 </select>
               </div>
               <div class="form-group mt-3">
                 <label for="productSelect">Selecciona el producto:</label>
                 <select class="form-select mt-2" id="productSelect" v-model="selectedProducto" required>
-                  <!-- <option value="seleccionar" selected>Seleccionar</option>
-                  <option v-for="producto in productos" :key="producto._id" :value="producto._id">
-                    {{ producto.nombre }} - ${{ producto.precio }} Stock: {{ producto.stock }}
-                  </option> -->
+                  <option value="seleccionar">Seleccionar</option>
+                  <option v-for="producto in productosArreglo" :key="producto._id" :value="producto._id">
+                    {{ producto.nombre }} - ${{ producto.precio }} Stock: {{
+                      producto.stock }}
+                  </option>
                 </select>
               </div>
               <div class="facturas-container d-flex gap-2">
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+              </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-          </div>
+
         </div>
       </div>
     </div>
@@ -78,6 +82,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const products = ref([]);
 const informacion = ref(null);
 const modalMostrar = ref(null);
+const productosArreglo = ref([]);
 
 console.log("elemento modal");
 console.log(modalMostrar.value);
@@ -170,6 +175,18 @@ const deleteFacturaDetalle = async (datoIdFacturaDetalle) => {
   }
 }
 
+const getProductsToArray = async()=>{
+  try {
+    const url = `http://localhost:3000/api/producto`;
+    const response = await fetch(url);
+    const result = await response.json();
+
+    productosArreglo.value = result.data;
+  } catch (error) {
+    
+  }
+}
+
 const getProducts = async () => {
   try {
     const url = 'http://localhost:3000/api/facturaproducto';
@@ -181,7 +198,9 @@ const getProducts = async () => {
     console.error('Error fetching data:', error);
   }
 };
-onMounted(getProducts);
+onMounted(() => {
+  getProducts(); getClientes();
+});
 
 window.JSZip = jszip;
 DataTable.use(Buttons, ButtonsCol, ButtonHtml5, ButtonPrint, pdfMake, jszip);
@@ -191,6 +210,80 @@ const fecha = new Date().toLocaleString('es-ES', {
   month: '2-digit',
   day: '2-digit',
 });
+
+let clienteFormulario = ref('');
+let clientes = ref([]);
+let selectedCliente = ref('');
+let selectedProducto = ref('');
+let productoId = ref('');
+let idFacturaProducto = ref('');
+let idFactura = ref('');
+
+// Actualizar factura
+const actualizarFactura = async() => {
+  //Sï funciona
+  //console.log(`EL cliente seleccionado es ${selectedCliente.value}`);
+  //console.log(`El producto seleccionado es ${selectedProducto.value}`);
+  //console.log(`El id de la facturaProducto es ${idFacturaProducto.value}`);
+
+  console.log(`El id de la factura es ${idFactura.value}`);
+  console.log(`El id del cliente es ${selectedCliente.value}`);
+
+  const dataFacturaProducto = {
+    id_factura: idFactura.value,
+    id_producto: selectedProducto.value,
+  };
+
+  await updateFacturaCliente(idFactura.value, {id_cliente: selectedCliente.value});
+  await updateFacturaProducto(idFacturaProducto.value, dataFacturaProducto);
+
+}
+
+//Get Clientes
+
+const getClientes = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/cliente');
+    const data = await response.json();
+    clientes.value = data.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+//Update factura
+const updateFacturaProducto = async (idFacturaProducto, dataFacturaProducto) => {
+  try {
+    const url = `http://localhost:3000/api/facturaproducto/${idFacturaProducto}`;
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataFacturaProducto),
+    });
+    const result = await response.json();
+
+  } catch (error) {
+    console.errror('Error fetching data:', error);
+  }
+}
+
+const updateFacturaCliente = async(idFactura,  idCliente)=>{
+  try {
+    const  url = `http://localhost:3000/api/factura/clientes/${idFactura}`;
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(idCliente),
+    });
+    const result = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const dataTableOptions = {
   responsive: true,
@@ -216,6 +309,7 @@ const dataTableOptions = {
   drawCallback: function () {
     const buttons = document.querySelectorAll('.eliminar');
     const buttonModal = document.querySelectorAll('.editar');
+    const exampleSelect = document.getElementById('exampleSelect');
     buttons.forEach(button => {
       button.addEventListener('click', function () {
         const id = button.getAttribute('data-eliminar');
@@ -223,10 +317,19 @@ const dataTableOptions = {
       });
     });
     buttonModal.forEach(button => {
-      button.addEventListener('click', function () {
+      button.addEventListener('click', async function () {
+        await getProductsToArray();
         const id = button.getAttribute('data-id');
-        console.log(id);
-        // handleDeleteButton(id);
+        const dataFactura = await getFacturaDetalle(id);
+        console.log(dataFactura[0].id_factura.id_cliente);
+        idFactura.value = dataFactura[0].id_factura._id;
+        let clienteSelected = `${dataFactura[0].id_factura.id_cliente.nombre} ${dataFactura[0].id_factura.id_cliente.apellido} - ${dataFactura[0].id_factura.id_cliente.id_cliente}`;
+        selectedCliente.value = dataFactura[0].id_factura.id_cliente._id;
+        exampleSelect.value = clienteSelected;
+        clienteFormulario.value = clienteSelected;
+        console.log(dataFactura[0]._id);
+        idFacturaProducto.value = dataFactura[0]._id;
+        productoId.value = dataFactura[0]._id;
       });
     });
   },

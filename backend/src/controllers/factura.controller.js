@@ -20,7 +20,8 @@ export const getClienteFactura = async (req, res) => {
   try {
     const data = await Factura.find().populate({
       path: "id_cliente",
-      select: "nombre apellido direccion fecha_nacimiento telefono email id_cliente", 
+      select:
+        "nombre apellido direccion fecha_nacimiento telefono email id_cliente",
       model: "Cliente",
     });
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
@@ -38,11 +39,11 @@ export const getClienteFactura = async (req, res) => {
 export const getFacturaByIdCliente = async (req, res) => {
   try {
     console.log(req.params.id);
-    const data = await Cliente.find({ id_cliente: req.params.id }); 
+    const data = await Cliente.find({ id_cliente: req.params.id });
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
     res.status(200).json({
       data,
-    }); 
+    });
   } catch (error) {
     res.status(500).json({
       type: error,
@@ -73,21 +74,38 @@ export const createFactura = async (req, res) => {
       msg: "Error on Server",
     });
   }
-}
+};
 
 export const deleteFactura = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const data = await Factura.findByIdAndDelete({_id: id});
+    const data = await Factura.findByIdAndDelete({ _id: id });
     if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
     res.status(200).json({
       data,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       type: error,
       msg: "Error on Server",
     });
   }
-}
+};
+
+export const updateFactura = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id_cliente } = req.body;
+    const data = await Factura.findByIdAndUpdate(id, { id_cliente });
+    if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: error,
+      msg: "Error on Server",
+    });
+  }
+};
