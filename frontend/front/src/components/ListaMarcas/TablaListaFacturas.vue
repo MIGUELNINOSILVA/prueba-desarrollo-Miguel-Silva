@@ -51,7 +51,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Guardar Cambios</button>
               </div>
             </form>
           </div>
@@ -85,7 +85,6 @@ const modalMostrar = ref(null);
 const productosArreglo = ref([]);
 
 console.log("elemento modal");
-console.log(modalMostrar.value);
 
 
 const handleDeleteButton = async (id) => {
@@ -175,7 +174,7 @@ const deleteFacturaDetalle = async (datoIdFacturaDetalle) => {
   }
 }
 
-const getProductsToArray = async()=>{
+const getProductsToArray = async () => {
   try {
     const url = `http://localhost:3000/api/producto`;
     const response = await fetch(url);
@@ -183,7 +182,7 @@ const getProductsToArray = async()=>{
 
     productosArreglo.value = result.data;
   } catch (error) {
-    
+
   }
 }
 
@@ -219,24 +218,18 @@ let productoId = ref('');
 let idFacturaProducto = ref('');
 let idFactura = ref('');
 
+
 // Actualizar factura
-const actualizarFactura = async() => {
-  //Sï funciona
-  //console.log(`EL cliente seleccionado es ${selectedCliente.value}`);
-  //console.log(`El producto seleccionado es ${selectedProducto.value}`);
-  //console.log(`El id de la facturaProducto es ${idFacturaProducto.value}`);
 
-  console.log(`El id de la factura es ${idFactura.value}`);
-  console.log(`El id del cliente es ${selectedCliente.value}`);
-
+const actualizarFactura = async () => {
   const dataFacturaProducto = {
     id_factura: idFactura.value,
     id_producto: selectedProducto.value,
   };
 
-  await updateFacturaCliente(idFactura.value, {id_cliente: selectedCliente.value});
+  await updateFacturaCliente(idFactura.value, { id_cliente: selectedCliente.value });
   await updateFacturaProducto(idFacturaProducto.value, dataFacturaProducto);
-
+  await getProducts();
 }
 
 //Get Clientes
@@ -269,9 +262,9 @@ const updateFacturaProducto = async (idFacturaProducto, dataFacturaProducto) => 
   }
 }
 
-const updateFacturaCliente = async(idFactura,  idCliente)=>{
+const updateFacturaCliente = async (idFactura, idCliente) => {
   try {
-    const  url = `http:
+    const url = `http:
     //localhost:3000/api/factura/clientes/${idFactura}`;
     const response = await fetch(url, {
       method: 'PUT',
