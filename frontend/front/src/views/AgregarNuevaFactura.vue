@@ -89,7 +89,8 @@ const postFactura = async (dataFactura) => {
       body: JSON.stringify(dataFactura),
     });
     const data = await response.json();
-    console.log(data.data);
+    console.log("Se creó la factura");
+    console.log(data);
 
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -121,34 +122,23 @@ const filterClientes = () => {
 };
 
 // Event submit
-const handleSubmit = (e) => {
-  console.log(selectedCliente.value);
-  console.log(selectedProducto.value);
+const handleSubmit = async (e) => {
+  try {
+    console.log("submit");
 
-  getFactura().then(() => {
-    const cantidad = facturas.value.length + 1;
-    const data = {
+    const dataFactura = {
       id_cliente: selectedCliente.value,
       fecha: new Date(),
-      num_factura: cantidad,
-    }
-    console.log(data);
-    postFactura(data);
-    alert("Factura agregada correctamente");
+      num_factura: ++facturas.value.length,
+    };
+    console.log(dataFactura);
+    await postFactura(dataFactura);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
-  });
 
-  getFactura().then(()=> {
-    const idFactura = facturas.value[facturas.value.length - 1]._id;
-    const data = {
-      id_factura: idFactura,
-      id_producto: selectedProducto.value,
-    }
-    console.log(data); 
-    postFacturaProducto(data);
-  }) 
-
-}
 
 watchEffect(() => {
   filterClientes();

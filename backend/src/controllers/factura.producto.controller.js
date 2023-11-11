@@ -57,3 +57,27 @@ export const deleteProducts = async (req, res) => {
     });
   }
 };
+
+
+export const getFacturaByIdFactura = async(req, res) => {
+  try {
+    const { id } = req.body;
+    const data = await FacturaProductos.find({_id: id})
+    .populate({
+      path: "id_factura",
+      populate: {
+        path: "id_cliente",
+      },
+    })
+    .populate("id_producto");
+    if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
+    res.status(200).json({
+      data,
+    })
+  } catch (error) {
+    res.status(500).json({
+      type: error,
+      msg: "Error on Server",
+    });
+  }
+}

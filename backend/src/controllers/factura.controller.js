@@ -74,3 +74,20 @@ export const createFactura = async (req, res) => {
     });
   }
 }
+
+export const deleteFactura = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const data = await Factura.findByIdAndDelete({_id: id});
+    if (!data) return res.status(404).json({ msg: "Datos no encontrados" });
+    res.status(200).json({
+      data,
+    })
+  } catch (error) {
+    res.status(500).json({
+      type: error,
+      msg: "Error on Server",
+    });
+  }
+}

@@ -75,6 +75,17 @@ const handleDeleteButton = function (id) {
   }).catch((error) => {
     console.log(error);
   })
+  getFacturaDetalle({id}).then((data) => {
+    console.log("Id de la factura");
+    console.log(data[0].id_factura._id);
+    // deleteFacturaCliente(dataFacturaCliente).then(() => {
+    //   console.log("Factura cliente eliminada");
+    // }).catch((error) => {
+    //   console.log(error);
+    // })
+  }).catch((error) => {
+    console.log(error);
+  })
 };
 
 const columns = [
@@ -124,6 +135,35 @@ const deleteFactura = async (dataFactura) => {
     console.error('Error fetching data:', error);
   }
 };
+
+const getFacturaDetalle = async(datoIdFactura) => {
+  try {
+    const url = 'http://localhost:3000/api/facturaproducto';
+    const response = await fetch(url);
+    const result = await response.json();
+    console.log(result.data);
+    return result.data
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+const deleteFacturaCliente = async(dataFacturaCliente)=>{
+  try {
+    const url = "http://localhost:3000/api/factura/clientes/";
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataFacturaCliente),
+    });
+    const result = await response.json();
+    console.log(result);  
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
 const getProducts = async () => {
   try {
