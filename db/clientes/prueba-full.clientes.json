@@ -1,0 +1,119 @@
+[{
+  "_id": {
+    "$oid": "654d48fa33282b263112b689"
+  },
+  "nombre": "Miguel",
+  "apellido": "Niño",
+  "direccion": "Calle 110A #32-42 Barrio el dorado",
+  "fecha_nacimiento": {
+    "$date": "2003-06-10T05:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3126078359"
+  },
+  "email": "ninosilvam99@gmail.com",
+  "categoria": "Categoria 1",
+  "id_cliente": 1005236051
+},
+{
+  "_id": {
+    "$oid": "654d644b33282b263112b6b9"
+  },
+  "nombre": "Laura",
+  "apellido": "Gómez",
+  "direccion": "Carrera 45 #25-18 Barrio San José",
+  "fecha_nacimiento": {
+    "$date": "1990-03-15T00:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3104567890"
+  },
+  "email": "lauragomez@gmail.com",
+  "categoria": "Categoria 2",
+  "id_cliente": 1005236052
+},
+{
+  "_id": {
+    "$oid": "654d645a33282b263112b6bb"
+  },
+  "nombre": "Carlos",
+  "apellido": "Martínez",
+  "direccion": "Avenida 80 #15-29 Barrio La Castellana",
+  "fecha_nacimiento": {
+    "$date": "1985-03-15T00:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3157890123"
+  },
+  "email": "carlosmartinez@hotmail.com",
+  "categoria": "Categoria 3",
+  "id_cliente": 1005236053
+},
+{
+  "_id": {
+    "$oid": "654d646333282b263112b6bd"
+  },
+  "nombre": "Ana",
+  "apellido": "Ramírez",
+  "direccion": "Calle 70 #40-12 Barrio El Prado",
+  "fecha_nacimiento": {
+    "$date": "1990-03-15T00:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3176543210"
+  },
+  "email": "anaramirez@yahoo.com",
+  "categoria": "Categoria 1",
+  "id_cliente": 1005236054
+},
+{
+  "_id": {
+    "$oid": "654d646a33282b263112b6bf"
+  },
+  "nombre": "David",
+  "apellido": "López",
+  "direccion": "Carrera 20 #10-45 Barrio Granada",
+  "fecha_nacimiento": {
+    "$date": "1982-05-06T05:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3145678901"
+  },
+  "email": "davidlopez@gmail.com",
+  "categoria": "Categoria 2",
+  "id_cliente": 1005236055
+},
+{
+  "_id": {
+    "$oid": "654d647033282b263112b6c1"
+  },
+  "nombre": "Isabel",
+  "apellido": "Herrera",
+  "direccion": "Avenida 35 #18-22 Barrio La Floresta",
+  "fecha_nacimiento": {
+    "$date": "1998-12-09T05:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3112345678"
+  },
+  "email": "isabelherrera@hotmail.com",
+  "categoria": "Categoria 3",
+  "id_cliente": 1005236056
+},
+{
+  "_id": {
+    "$oid": "654e42aa2bc185844e2263ae"
+  },
+  "nombre": "Isabel",
+  "apellido": "Herrera",
+  "direccion": "Avenida 35 #18-22 Barrio La Floresta",
+  "fecha_nacimiento": {
+    "$date": "1998-12-09T05:00:00.000Z"
+  },
+  "telefono": {
+    "$numberLong": "3112345678"
+  },
+  "email": "isabelherrera@hotmail.com",
+  "categoria": "Categoria 3",
+  "id_cliente": 1005236057
+}]

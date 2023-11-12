@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "654d4ebe33282b263112b696"
+  },
+  "id_factura": {
+    "$oid": "654d4e0033282b263112b68c"
+  },
+  "id_producto": {
+    "$oid": "654d4e4333282b263112b690"
+  }
+},
+{
+  "_id": {
+    "$oid": "654eda0fdc98eaf1446d3454"
+  },
+  "id_factura": {
+    "$oid": "654eda0edc98eaf1446d3452"
+  },
+  "id_producto": {
+    "$oid": "654d4e4333282b263112b690"
+  },
+  "createdAt": {
+    "$date": "2023-11-11T01:34:07.131Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-11T01:34:07.131Z"
+  }
+}]
